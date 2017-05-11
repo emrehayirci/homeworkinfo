@@ -7,33 +7,47 @@
         </div>
 
     <div class="col-md-10">
-    <div class="infos">
-        <h1>Tesis Bilgileri</h1>
-    </div>
+    
     <div class="row center">
 
     </div>
 
     <div class="row center">
-        <div class="infos">
-            <h1> Sahalar </h1>
-        </div>
+        
     </div>
         <div class="row">
-        <ul class="list-group">
-            {% for court in courts %}
-                <li class="list-group-item">
-                    {{court.name_of_court}}
+        <ul class="list-group account-list">
+            <div class="row">
+            {% for account in accounts%}
+                Account Owner: {{ account.user.first_name }} <br>
 
-                    <a href={% url 'court_edit' pk=court.id  %}><span class="glyphicon glyphicon-pencil"><strong>  </strong></span></a>
+                IBAN NO : {{ account.iban }}
+                <div style='padding-left: 60%;'>
+                    Credit : {{ account.amount }}
+                </div>
 
-                </li>
+                <a href={% url 'account_update' pk=account.id %} style="padding-left:60%;"> 
+                    <span class="glyphicon glyphicon-pencil"></span>
+                </a>
+                  <a href={% url 'account_delete' pk=account.id %}>
+                    <span class="glyphicon glyphicon-trash"></span>
+                  </a>
             {% endfor %}
+            
+            
+            </div>
+            
         </ul>
     </div>
-        <div class="col-md-offset-10 col-md-3">
-            <a href="{% url 'create_court_web' %}" class="btn btn-primary" role="button"> Saha Ekle</a>
-        </div>
+            <form action="{% url 'settings' %}" style="padding-left: 100%;" method="POST" >
+                {% csrf_token %}
+                <input type="submit" class='btn btn-primary'>
+            </form>
+            <form action="{% url 'add_currency' %}" style="padding-left: 100%;" method="GET" >
+                {% csrf_token %}
+                <input type="submit" class='btn btn-primary' value='Add different currency'>
+            </form>
+            <a href={% url 'currency_list'%} class='btn btn-primary' style="margin-left: 100%; " value='Currency List'>Currency List</a>
         <hr>
 
 

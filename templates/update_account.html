@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block content %}
+    <link rel="stylesheet" href="{% static 'css/settings/court_list.css' %}">
+    <div class="col-md-offset-5">
+
+        </div>
+
+    <div class="col-md-10">
+    
+    <div class="row center">
+
+    </div>
+
+    <div class="row center">
+        
+    </div>
+        <div class="row">
+        <ul class="list-group">
+            {% if accountform %}
+                <h2> Update Account </h2>
+                <form action={% url 'account_update' pk=account_id %} method='POST' >
+                {{ accountform }}
+                {% csrf_token %}
+                <div class='form-group' style='padding-left: 90%; padding-top: 15px;'>
+                    <input type="submit" class="btn btn-primary" value='Submit'>
+                </div>
+                </div>
+            {% endif %}
+        </ul>
+    </div>
+        
+        <hr>
+
+
+
+    </div>
+
+{% endblock %}

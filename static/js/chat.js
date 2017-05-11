@@ -111,8 +111,5 @@
             window.addEventListener("resize", calculate_popups);
             window.addEventListener("load", calculate_popups);
 
-            for(var i=0; i < chat_informations.length; i++){
-
-
-            }
+            
 

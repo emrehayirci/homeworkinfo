@@ -55,24 +55,18 @@
 					<!-- Dropdown-->
 					<li class="panel panel-default" id="dropdown">
 						<a data-toggle="collapse" href="#dropdown-lvl1">
-							<span class="glyphicon glyphicon-user"></span> Sahalar <span class="caret"></span>
+							<span class="glyphicon glyphicon-user"></span> Accounts <span class="caret"></span>
 						</a>
 
 						<!-- Dropdown level 1 -->
 						<div id="dropdown-lvl1" class="panel-collapse collapse">
 							<div class="panel-body">
-								<ul class="nav navbar-nav">
-
-                                    {% for court in courts %}
-									<li><a href={% url 'court' pk=court.id %}><strong>{{court.name_of_court}}</strong></a></li>
-                                    {% endfor %}
-
-								</ul>
+								
 							</div>
 						</div>
 					</li>
 
-					<li><a href={% url 'settings' %}><span class="glyphicon glyphicon-signal"></span> Ayarlar </a></li>
+					
 
 				</ul>
 			</div><!-- /.navbar-collapse -->

@@ -1,3 +1,11 @@
 .infos{
     margin-left: 30px;
 }
+
+.account-list{
+    padding-left: 30%;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 16px;
+    border-style: groove;
+    border-radius: 5px;
+}

@@ -1,4 +1,76 @@
-from django.shortcuts import render
-
+from django.shortcuts import render, redirect
+from .forms import AccountForm
+from .models import Accounts, Currency
+from IPython import embed
 # Create your views here.
 
+def settings(request):
+    if request.method == 'POST':
+        form = AccountForm()
+        return render(request, 'create_account.html', {'accountform': form})
+    accounts = Accounts.objects.all()
+    return render(request, 'settings/court_list.html', {'accounts': accounts})
+
+
+def create_account(request):
+    form = AccountForm(request.POST)
+    if form.is_valid():
+        currency = Currency.objects.filter(pk=request.POST.get('currency_type'))[0]        
+        account = form.save()
+        account.currency_type = currency
+        account.user = request.user
+        account.save()
+        return redirect('settings')
+    else:
+        return redirect('settings')
+
+def account_delete(request, pk):
+    account = Accounts.objects.get(pk=pk)
+    account.delete()
+    return redirect('settings')
+
+def account_update(request, pk):
+
+    if request.method == 'GET':
+        account = Accounts.objects.get(pk=pk)
+        form = AccountForm(initial={'iban': account.iban, 'account_type':account.account_type,
+                                    'currency_type': account.currency_type.currency_type, 'user':account.user.first_name,
+                                    'amount': account.amount})
+        return render(request, 'update_account.html', {'accountform': form, 'account_id':account.id})
+    elif request.method == 'POST':
+        obj = Accounts.objects.get(pk=pk)
+        
+        form = AccountForm(request.POST, instance=obj)
+        form.save()
+        return redirect('settings')
+
+def currency_list(request):
+    c = Currency.objects.all()
+    return render(request, 'currency_list.html', {'currencies': c})
+
+
+def add_currency(request):
+
+    if request.method == 'GET':
+        return render(request, 'currency_add.html')
+    elif request.method == 'POST':
+        Currency.objects.create(currency_type=request.POST.get('currency'))
+        currencies = Currency.objects.all()
+        return render(request, 'currency_list.html', {'currencies': currencies})
+
+def delete_currency(request, pk):
+    c = Currency.objects.get(pk=pk)
+    c.delete()
+    currencies = Currency.objects.all()
+    return render(request, 'currency_list.html', {'currencies': currencies})
+
+def update_currency(request, pk):
+    if request.method == 'GET':
+        c = Currency.objects.get(pk=pk)
+        return render(request, 'update_currency.html', {'curreny': c})
+    elif request.method == 'POST':
+        c = Currency.objects.get(pk=pk)
+        c.currency_type=request.POST.get('currency')
+        c.save()
+        currencies = Currency.objects.all()
+        return render(request, 'currency_list.html', {'currencies': currencies})

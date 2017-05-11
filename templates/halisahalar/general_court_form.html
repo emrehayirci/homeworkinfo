@@ -1,0 +1,82 @@
+{% load staticfiles %}
+<form action="{% url 'create_court_web' %}" method="POST">
+    <script type="text/javascript" src='http://maps.google.com/maps/api/js?key=AIzaSyCUKoyNxB45RWoBXYmY8xdEwUmn9gIgv9U&sensor=false&libraries=places'></script>
+    <script src="{% static 'halisahalar/js/locationpicker.jquery.js' %}"></script>
+    {% csrf_token %}
+    <div class="col-md-offset-2 col-md-6">
+        <div class="form-group">
+            <label>Saha İsmi :</label>
+            <div class="">
+            {{ form.court_name }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label>İl :</label>
+            {{ form.il }}
+        </div>
+        <div class="form-group">
+            <label> İlçe </label>
+            {{ form.ilce }}
+        </div>
+
+        <div class="form-group">
+            <label> Mahalle </label>
+            {{ form.mahalle }}
+        </div>
+
+        <div class="form-group">
+            <label> Sokak </label>
+            {{ form.sokak }}
+        </div>
+        <div class="form-group">
+            <label> No: </label>
+            {{ form.no }}
+        </div>
+        <div class="form-group">
+            <label>Latitude :</label>
+            {{ form.latitude }}
+        </div>
+        <div class="form-group">
+            <label>Longitude :</label>
+            {{ form.longitude }}
+        </div>
+
+        <div class="form-group">
+
+
+                <select class="form-control" name="category">
+                {% for category in categories %}
+                  <option value="{{ category.id }}">{{ category.sport_name }}</option>
+                {% endfor %}
+                </select>
+
+        </div>
+
+        <div id="datepair">
+            <label>Saha Açılış :</label>
+            <input type="text" name='open_time' class="time start form-control" />
+            <label>Saha Kapanış :</label>
+            <input type="text" name='close_time' class="time end form-control" />
+        </div>
+    <input type="submit" value="Gonder" class="btn btn-primary col-md-offset-10">
+    </div>
+</form>
+<br><br><br><br>
+
+{#<script type="text/javascript" src="datepair.js"></script>#}
+{#<script type="text/javascript" src="jquery.datepair.js"></script>#}
+<script>
+    $('#datepair .time').timepicker({
+         timeFormat: 'H:00',
+        'step': 60
+    });
+
+
+</script>
+
+<div id="somecomponent" style="width: 500px; height: 400px;">
+</div>
+
+<script>
+$('#somecomponent').locationpicker();
+</script>

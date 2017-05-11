@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% load staticfiles %}
+
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:600" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'css/chat/chat.css' %}">
+    <link rel="stylesheet" href="{% static 'css/calendar/calendar_arrows.css' %}">
+    <link href="{% static 'calendar.css' %}" rel="stylesheet" />
+
+</head>
+
+
+    <div class="col-md-9">
+        <div id="root" class="calendar well">
+            <div id="root_boxes">
+
+            </div>
+             <div class="arrows">
+                 <a class="leftarrow" id="leftarrow">Önceki Hafta</a>
+                 <a class="rightarrow" id="rightarrow">Sonraki Hafta</a>
+             </div>
+        </div>
+
+    </div>
+    <div class="col-md-1">
+        <div class="chat-sidebar">
+            {% for chat in chat_informations %}
+            <div class="sidebar-name">
+                <!-- Pass username and display name to register popup -->
+                <a href="javascript:register_popup('{{ chat.group }}-{{ chat.id }}', '{{ chat.name }}');">
+                    <img width="30" height="30" src="https://fbcdn-profile-a.akamaihd.net/hprofile-ak-xap1/v/t1.0-1/p50x50/1510656_10203002897620130_521137935_n.jpg?oh=572eaca929315b26c58852d24bb73310&oe=54BEE7DA&__gda__=1418131725_c7fb34dd0f499751e94e77b1dd067f4c" />
+                    <span>{{ chat.name }}</span>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div id="chatboxes">
+
+    </div>
+
+    <div id="modal" class="modal">
+
+        <div id="reserved" class="modal-content">
+            <h1>Rezerve edildi</h1>
+            <form action="{% url 'appointment_update' %}"  method='POST' id="ajaxform_update_appointment">
+                {% csrf_token %}
+                <label>Not: </label>
+                <div class="form-group">
+                    <input class='click_id' type="hidden" name="id" value="">
+                <textarea id='reserved_note' name="note" id="note" cols="30" rows="10"></textarea>
+
+                </div>
+                <div class="form-group">
+                    <label id="reserved_name"></label>
+                </div>
+                <div class="form-group">
+                    <label id="reserved_date"></label>
+                </div>
+                <div class="form-group">
+                    <label id="reserved_paid"></label>
+                </div>
+                <div class="form-group">
+                    <label id="deposit_paid_reserved"></label>
+                </div>
+                <input type="submit" class="btn btn-primary" value="Güncelle">
+                <div id="reserved_info">
+                        <p class="bg-success">
+
+                        </p>
+                </div>
+            </form>
+                <button id='cancel' class="btn btn-danger">Reservasyon İptal</button>
+        </div>
+
+
+        <div id="not_reserved" class="modal-content">
+
+
+            <div class="row" style="padding-left: 20px;">
+            <h2> Rezerve edilmedi </h2>
+                <div class="row">
+                    <div id="date_and_time_info">
+
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <form action={% url 'make_reservation'  %} method='POST' id="ajaxform_make_reservation">
+                {% csrf_token %}
+                <label>Not: </label>
+                <div class="form-group">
+                <textarea name="note" id="not_reserved_note" cols="30" rows="10"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Rezervasyon Ismi Soyismi</label>
+                    <input type="text" name="name" id="not_reserved_name">
+                </div>
+                <div class="form-group">
+                    <label>Rezervasyon Sahibinin Telefonu</label>
+                    <input type="text" name="phone" id="phone_name">
+                </div>
+
+                <div class="form-group">
+                    <label>Ödendi</label>
+                    <input id='paid' type="checkbox" name="paid" value="true"><br>
+                    <div class="paid">
+                        <input type="text" name="country" value="{{ facility.price }}" readonly>
+                    </div>
+
+                    <label> Kapora </label>
+                    <input id='deposit' type="checkbox" name="deposit" value="true">
+                    <div class="deposit">
+                        <input type="text" name="deposit_value" value="0.00">
+                    </div>
+                    <br>
+
+                </div>
+
+
+                <input type="submit" class="btn btn-primary" value="Rezerve et">
+            </form>
+        
+
+        </div>
+
+
+    </div>
+    <script>
+        var days="{{ days }}";
+        var appointments="{{ appointments }}";
+        var csrftoken = "{{ csrf_token }}";
+        var court_id = "{{ chosen_court.id }}";
+        var price = "{{ facility.price }}";
+        var chat_informations = "{{ chat_informations }}";
+        var monday_of_week = "{{ monday|date:'SHORT_DATE_FORMAT' }}";
+    </script>
+
+    <script src="{% static 'calendar.js' %}" charset="utf-8" defer/>
+    <script src="{% static 'js/chat.js' %}"></script>
+
+
+
+{% endblock %}

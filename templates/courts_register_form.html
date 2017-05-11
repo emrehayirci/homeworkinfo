@@ -1,0 +1,42 @@
+<head>
+<link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap.css" />
+</head>
+     <form action="{% url 'create_courtowner' %}" method='post'>
+        {% csrf_token %}
+
+
+        <div class="col-md-7">
+        <div class="form-group">
+            <label>Email Adresiniz: </label>
+            {{ form.email }}
+        </div>
+        <div class="form-group">
+            <label>Parolaniz :</label>
+            {{ form.password }}
+        </div>
+        <div class="form-group">
+            <label>Isminiz :</label>
+            {{ form.first_name }}
+        </div>
+        <div class="form-group">
+            <label>Soyadiniz :</label>
+            {{ form.last_name }}
+        </div>
+
+        <div class="form-group">
+          <label for="sel1">Select list:</label>
+          <select class="form-control" id="sport_name" name="sport_name">
+            {% for sport in sportscategories %}
+                <option value="{{ sport.id }}"> {{ sport.sport_name }} </option>
+            {% endfor %}
+            </select>
+        </div>
+
+        <div class='col-md-offset-11 col-md-1'>
+        <button type="submit" class="btn btn-success">Submit</button>
+        </div>
+
+    </form>
+
+<script src="{{ STATIC_URL }}js/jquery-2.1.4.min.js"></script>
+<script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>

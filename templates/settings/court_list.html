@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block content %}
+    <link rel="stylesheet" href="{% static 'css/settings/court_list.css' %}">
+    <div class="col-md-offset-5">
+
+        </div>
+
+    <div class="col-md-10">
+    <div class="infos">
+        <h1>Tesis Bilgileri</h1>
+    </div>
+    <div class="row center">
+
+    </div>
+
+    <div class="row center">
+        <div class="infos">
+            <h1> Sahalar </h1>
+        </div>
+    </div>
+        <div class="row">
+        <ul class="list-group">
+            {% for court in courts %}
+                <li class="list-group-item">
+                    {{court.name_of_court}}
+
+                    <a href={% url 'court_edit' pk=court.id  %}><span class="glyphicon glyphicon-pencil"><strong>  </strong></span></a>
+
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+        <div class="col-md-offset-10 col-md-3">
+            <a href="{% url 'create_court_web' %}" class="btn btn-primary" role="button"> Saha Ekle</a>
+        </div>
+        <hr>
+
+
+
+    </div>
+
+{% endblock %}

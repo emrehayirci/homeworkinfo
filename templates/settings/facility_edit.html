@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load staticfiles %}
+
+    <form action="{% url 'update_court' pk=chosen_court.id %}" method='post'>
+        {% csrf_token %}
+    <div class="row">
+        <h1> {{ chosen_court.court_name }} </h1>
+    </div>
+
+    <div class="col-md-7">
+        <div class="form-group">
+            <label>Saha İsmi :</label>
+            <input type="text" class="form-control" value="{{ chosen_court.court_name }}">
+        </div>
+        <div class="form-group">
+            <label>Il :</label>
+            <input type="text" class="form-control" value="{{ chosen_court.address.il }}">
+        </div>
+        <div class="form-group">
+            <label>İlçe :</label>
+            <input type="text" class="form-control" value="{{ chosen_court.address.ilce }}">
+        </div>
+        <div class="form-group">
+            <label>Mahalle :</label>
+            <input type="text" class="form-control" value="{{ chosen_court.address.mahalle }}">
+        </div>
+        <div class="form-group">
+            <label>Sokak :</label>
+            <input type="text" class="form-control" value="{{ chosen_court.address.sokak }}">
+        </div>
+        <div class="form-group">
+            <label>No :</label>
+            <input type="text" class="form-control" value="{{ chosen_court.address.no }}">
+        </div>
+        <div class="form-group">
+            <label>Latitude :</label>
+            <input type="text" class="form-control" value="{{ chosen_court.latitude }}">
+        </div>
+        <div class="form-group">
+            <label>Longitude :</label>
+            <input type="text" class="form-control" value="{{ chosen_court.longitude }}">
+        </div>
+
+
+    <div class="form-group" id="datepairExample">
+{#        Saha Açılış : <input type="text" class="time start" />#}
+{#        Saha Kapanış : <input type="text" class="time end" />#}
+        Saha Açılış : {{ chosen_court.open }}
+        Saha Kapanış : {{ chosen_court.close_time }}
+    </div>
+        <div class="col-md-offset-9">
+        <button class="btn btn-danger" id="court_delete">Sil</button>
+        <button type="submit" class="btn btn-success">Submit</button>
+        </div>
+
+
+    </form>
+
+    <form action="{% url 'court_edit' pk=chosen_court.id %}" id="delete_form" method="post">
+        {% csrf_token %}
+    </form>
+
+    <script src="{% static 'webinterface/js/court_delete.js' %}"></script>
+    {#        Saha Açılış : <input type="text" class="time start" />#}
+{#        Saha Kapanış : <input type="text" class="time end" />#}
+{#    <script type="text/javascript" src="datepair.js"></script>#}
+{#    <script type="text/javascript" src="jquery.datepair.js"></script>#}
+    <script>
+    // initialize input widgets first
+    $('#datepairExample .time').timepicker({
+         timeFormat: 'H:00'
+    });
+
+    // initialize datepair
+    $('#timepick').timepicker();
+    </script>
+    </div>
+
+{% endblock %}

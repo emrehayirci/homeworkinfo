@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils import timezone
-from django.contrib.auth.models import User
+from users.models import User
 # Create your models here.
 
 class Currency(models.Model):
@@ -15,7 +15,7 @@ class Accounts(models.Model):
     created_at = models.DateTimeField(default=timezone.now())
     account_type = models.CharField(max_length=50)
     currency_type = models.ForeignKey(Currency, null=True)
-    user = models.ForeignKey(User, null=True)
+    user = models.ForeignKey(User, null=True, blank=True)
     amount = models.IntegerField()
 
     def __str__(self):

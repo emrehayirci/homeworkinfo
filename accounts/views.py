@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .forms import AccountForm
 from .models import Accounts, Currency
 from IPython import embed
+from django.contrib.auth.models import User
 # Create your views here.
 
 def settings(request):
@@ -14,13 +15,23 @@ def settings(request):
 
 def create_account(request):
     form = AccountForm(request.POST)
-    if form.is_valid():
-        currency = Currency.objects.filter(pk=request.POST.get('currency_type'))[0]        
-        account = form.save()
-        account.currency_type = currency
-        account.user = request.user
-        account.save()
-        return redirect('settings')
+    if request.method == 'GET':
+        form = AccountForm()
+        return render(request, 'create_account.html', {'accountform': form})
+    elif request.method == 'POST':
+        if form.is_valid():
+            currency = Currency.objects.filter(pk=request.POST.get('currency_type'))
+            if len(currency) > 0:
+                currency = currency[0]
+            else:
+                currency = Currency.objects.first()
+            Accounts.objects.create(iban=request.POST.get('iban'), account_type=request.POST.get('account_type'),
+                                    user=User.objects.first(), currency_type=currency, amount=request.POST.get('amount'))
+            # account = form.save(user=request.user)
+            # account.currency_type = currency
+            # account.user = request.user
+            # account.save()
+            return redirect('settings')
     else:
         return redirect('settings')
 

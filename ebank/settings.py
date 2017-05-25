@@ -77,18 +77,16 @@ WSGI_APPLICATION = 'ebank.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'ebank',
-        'USER': 'postgres',
-        'PASSWORD': 'django',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': '/Users/emreyavuz/Desktop/Python/Django/ebank/ebank.sqlite',
     }
 }
 
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
+
+AUTH_USER_MODEL = 'users.User'
 
 AUTH_PASSWORD_VALIDATORS = [
     {

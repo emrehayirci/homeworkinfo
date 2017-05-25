@@ -16,7 +16,7 @@ class User(AbstractBaseUser, PermissionsMixin, models.Model):
     last_name = models.CharField(_('last name'), max_length=30, blank=True)
     date_joined = models.DateTimeField(_('date joined'), auto_now_add=True)
     is_active = models.BooleanField(_('active'), default=True)
-    Photo = models.ImageField(upload_to='Images/', default='Images/None/obama.jpg')
+    #Photo = models.ImageField(upload_to='Images/', default='Images/None/obama.jpg')
     is_staff = models.BooleanField(default=False)
     phone_no = models.CharField(max_length=20, blank=True)
     objects = UserManager()

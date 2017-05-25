@@ -12,7 +12,7 @@ class Currency(models.Model):
 class Accounts(models.Model):
 
     iban = models.CharField(max_length=60, blank=True)
-    created_at = models.DateTimeField(default=timezone.now())
+    created_at = models.DateTimeField(auto_now_add=True)
     account_type = models.CharField(max_length=50)
     currency_type = models.ForeignKey(Currency, null=True)
     user = models.ForeignKey(User, null=True, blank=True)

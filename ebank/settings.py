@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'ebank.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': '/Users/emreyavuz/Desktop/Python/Django/ebank/ebank.sqlite',
+        'NAME': 'C:/Users/02483901/Desktop/homeworkinfo/ebank.sqlite',
     }
 }
 

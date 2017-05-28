@@ -20,4 +20,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^accounts/', include('accounts.urls')),
     url(r'^users/', include('users.urls')),
+    url(r'^$', include('e_branch.urls')),
 ]

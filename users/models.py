@@ -50,3 +50,12 @@ class User(AbstractBaseUser, PermissionsMixin, models.Model):
         '''
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
+
+class Address(models.Model):
+
+    city = models.CharField(max_length=255)
+    district = models.CharField(max_length=255)
+    zipcode = models.CharField(max_length=10)
+    street = models.CharField(max_length=60)
+    no = models.CharField(max_length=10)
+

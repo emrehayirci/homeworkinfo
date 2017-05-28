@@ -3,20 +3,59 @@ from django.utils import timezone
 from users.models import User
 # Create your models here.
 
+
 class Currency(models.Model):
     currency_type = models.CharField(max_length=50)
 
     def __str__(self):
         return self.currency_type
 
+
 class Accounts(models.Model):
 
     iban = models.CharField(max_length=60, blank=True)
-    created_at = models.DateTimeField(default=timezone.now())
+    created_at = models.DateTimeField(auto_now_add=True)
     account_type = models.CharField(max_length=50)
     currency_type = models.ForeignKey(Currency, null=True)
     user = models.ForeignKey(User, null=True, blank=True)
     amount = models.IntegerField()
 
     def __str__(self):
-        return 'Account owner is : ' + self.user.first_name  + ' IBAN no is : ' + self.iban
+        return 'Account owner is : ' + self.user.first_name + ' IBAN no is : ' + self.iban
+
+
+class Loan(models.Model):
+
+    account = models.ForeignKey(Accounts)
+    interest_rate = models.DecimalField(max_digits=4, decimal_places=2, blank=True, default=0)
+    installment = models.IntegerField(default=1)
+    start_date = models.DateField()
+    finish_date = models.DateField()
+    amount = models.IntegerField()
+    delay_interest_rate = models.DecimalField(max_digits=4, decimal_places=2, blank=True, default=0)
+
+
+class LoanAccountPayment(models.Model):
+
+    account = models.ForeignKey(Accounts)
+    loan = models.ForeignKey(Loan)
+    installment_number = models.IntegerField()
+    is_paid = models.BooleanField(default=False)
+    finish_date = models.DateField()
+    is_active = models.BooleanField(default=True)
+
+
+class Transaction(models.Model):
+
+    description = models.CharField(max_length=800)
+    amount = models.IntegerField()
+    currency_type = models.ForeignKey(Currency)
+    sourceaccount = models.ForeignKey(Accounts, related_name='source_account')
+    destinationaccount = models.ForeignKey(Accounts, related_name='destination_account')
+    sending_date = models.DateField()
+
+
+
+
+
+

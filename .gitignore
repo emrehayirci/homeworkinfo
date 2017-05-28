@@ -78,6 +78,12 @@ celerybeat-schedule
 # dotenv
 .env
 
+#idea
+.idea
+
+#db
+*.sqlite
+
 # virtualenv
 venv/
 ENV/

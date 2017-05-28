@@ -81,6 +81,9 @@ celerybeat-schedule
 #idea
 .idea
 
+#vscode
+.vscode
+
 #db
 *.sqlite
 *.sqlite3

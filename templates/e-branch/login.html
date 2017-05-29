@@ -1,0 +1,13 @@
+{% extends "e-branch/_unauthorized.html" %}
+
+{% block content %}
+
+<form class="form-signin" action="" method="post"  >
+    <h2 class="form-signin-heading">Log In to E-Bank Corporate Banking System</h2>
+    {% csrf_token %}
+	{{ form.as_p }}
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Log In!</button>
+	<!--<input type="submit" value="Login" />-->
+</form>
+
+{% endblock %}

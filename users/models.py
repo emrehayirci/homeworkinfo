@@ -12,6 +12,7 @@ from .managers import UserManager
 
 class User(AbstractBaseUser, PermissionsMixin, models.Model):
     email = models.EmailField(_('email address'), unique=True, null=False)
+
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=30, blank=True)
     date_joined = models.DateTimeField(_('date joined'), auto_now_add=True)
@@ -19,6 +20,7 @@ class User(AbstractBaseUser, PermissionsMixin, models.Model):
     #Photo = models.ImageField(upload_to='Images/', default='Images/None/obama.jpg')    
     is_staff = models.BooleanField(default=False)
     phone_no = models.CharField(max_length=20, blank=True)
+    identity_number = models.CharField(max_length=20, blank=False, default=0)
     objects = UserManager()
 
     USERNAME_FIELD = 'email'

@@ -3,8 +3,7 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
-    # url(r'^(?P<pk>[0-9]+)/$', views.UserProfile.as_view(), ),
-    url(r'^$', views.settings, name='settings'),
+    # url(r'^(?P<pk>[0-9]+)/$', views.UserProfile.as_view(), )
     url(r'^create/$', views.create_account, name='create_account'),
     url(r'^delete/(?P<pk>[0-9]+)/$', views.account_delete, name='account_delete'),
     url(r'^create_currrency/$', views.add_currency, name='add_currency'),
@@ -12,5 +11,9 @@ urlpatterns = [
     url(r'^update/(?P<pk>[0-9]+)/$', views.account_update, name='account_update'),
     url(r'^update_currency/(?P<pk>[0-9]+)/$', views.update_currency, name='currency_update'),
     url(r'^delete_currency/(?P<pk>[0-9]+)/$', views.delete_currency, name='currency_delete'),
+    url(r'^transaction/(?P<pk>[0-9]+)/$', views.cancel_transaction, name='cancel_transaction'),
+    url(r'^transaction/delete/(?P<pk>[0-9]+)/$', views.delete_transaction, name='delete_transaction'),
+    url(r'^transactions/$', views.transactions_list, name='transactions'),
+    url(r'$', views.settings, name='settings'),
     
 ]

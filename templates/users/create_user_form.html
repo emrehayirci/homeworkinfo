@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <form action="{% url 'create_user' %}" method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label> Email </label>
+            <input type="text" class="form-control" value="email" name="email">
+        </div>
+        <div class="form-group">
+            <label> Password </label>
+            <input type="text" class="form-control" value="password" name="password">
+        </div>
+        <div class="form-group">
+            <label> First Name :</label>
+            <input type="text" class="form-control" value="first_name" name="first_name">
+        </div>
+        <div class="form-group">
+            <label>Last Name : </label>
+            <input type="text" class="form-control" value="last_name" name="last_name">
+        </div>
+        <div class="form-group">
+            <label> City</label>
+            <input type="text" class="form-control" value="city" name="city">
+        </div>
+        <div class="form-group">
+            <label> Street </label>
+            <input type="text" class="form-control" value="street" name="street">
+        </div>
+        <div class="form-group">
+            <label> District </label>
+            <input type="text" class="form-control" value="district" name="district">
+        </div>
+        <div class="form-group">
+            <label>Zipcode</label>
+            <input type="text" class="form-control" value="zipcode" name="zipcode">
+        </div>
+        <div class="form-group">
+            <label for=""> Block No : </label>
+            <input type="text" class="form-control" value="no" name="no">
+        </div>
+        <div class="form-group">
+            <label for=""> Phone No : </label>
+            <input type="text" class="form-control" value="phone_no" name="phone_no">
+        </div>
+        <input type="submit" value="Save Form" class="btn btn-primary" style="margin-left: 80%;">
+    </form>
+{% endblock  %}

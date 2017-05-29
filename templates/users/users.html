@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="col-md-6">
+    <div class="box">
+
+            <!-- /.box-header -->
+            <div class="box-body">
+              <table class="table table-bordered">
+                <tbody><tr>
+                  <th style="width: 10px">email</th>
+                  <th>Total Credit</th>
+                  <th>First Name</th>
+                  <th>Address</th>
+                  <th>Accounts</th>
+                  <th>Edit</th>
+                  <th>Destroy</th>
+                </tr>
+                {% for user in users %}
+                <tr>
+
+                  <td>{{ user.email }}</td>
+                  <td>{{ user.total_credit }}</td>
+                  <td>{{ user.first_name }}</td>
+                  <td>{{ user.address }}</td>
+                  <td>
+                    {% for account in user.accounts %}
+                        <a href="{% url 'account_update' pk=account.id %}">{{ account.iban }}</a><br>
+                    {% endfor  %}
+                  </td>
+
+                <td>
+                      <a href="{% url 'update_user' pk=user.id %}" style="padding-left:60%;">
+                        <span class="glyphicon glyphicon-pencil"></span>
+                      </a>
+                  </td>
+                  <td>
+                      <a href="{% url 'delete_user' pk=user.id %}">
+                        <span class="glyphicon glyphicon-trash"></span>
+                      </a>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody></table>
+            </div>
+            <!-- /.box-body -->
+    </div>
+</div>
+<div class="col-md-2">
+    <a href="{% url 'create_user' %}" class="btn btn-primary"> Create User</a>
+</div>
+
+{% endblock %}

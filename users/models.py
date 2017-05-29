@@ -60,4 +60,6 @@ class Address(models.Model):
     zipcode = models.CharField(max_length=10)
     street = models.CharField(max_length=60)
     no = models.CharField(max_length=10)
+    user = models.ForeignKey(User, null=True)
+
 

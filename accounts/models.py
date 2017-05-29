@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from users.models import User
+from django.shortcuts import get_object_or_404
 # Create your models here.
 
 ACCOUNT_TYPE_CHOICES = (
@@ -59,8 +60,53 @@ class Transaction(models.Model):
     sourceaccount = models.ForeignKey(Accounts, related_name='source_account')
     destinationaccount = models.ForeignKey(Accounts, related_name='destination_account')
     sending_date = models.DateField()
+    is_done = models.BooleanField(default=False)
 
+    def make_transaction(self):
+        source = get_object_or_404(Accounts, pk=self.sourceaccount.id)
+        destination = get_object_or_404(Accounts, pk=self.destinationaccount.id)
+        source.amount = source.amount - self.amount
+        source.save()
+        destination.amount = self.amount + self.amount
+        destination.save()
+        self.is_done = True
+        self.save()
+        return self
 
+    def validate_transaction(self):
+        """
+        It validates transaction can be made or not.
+        If there is not enough money transaction cannot be made
+        :param transaction:
+        :return:
+        """
+        if self.sourceaccount.amount > self.amount:
+            return True
+        else:
+            return False
+
+    def cancel_transaction(self):
+        source = get_object_or_404(Accounts, pk=self.sourceaccount.id)
+        destination = get_object_or_404(Accounts, pk=self.destinationaccount.id)
+        source.amount = source.amount + self.amount
+        source.save()
+        destination.amount = destination.amount - self.amount
+        destination.save()
+        self.is_done = False
+        self.save()
+        return self
+
+    def cancel_validate_transaction(self):
+        """
+        It validates transaction can be canceled,
+        if there is not enough money destination account transaction cannot be cancel
+        :param transaction:
+        :return:
+        """
+        if self.destinationaccount.amount > self.amount:
+            return True
+        else:
+            return False
 
 
 

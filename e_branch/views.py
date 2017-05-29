@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from accounts.models import *
 from users.models import User
 from django.contrib import messages
-from e_branch.forms import RegistrationForm, LoginForm
+from e_branch.forms import RegistrationForm, LoginForm, AccountCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import (
     login as auth_login,
@@ -62,7 +62,8 @@ def register(request):
 @login_required(login_url='login')
 def accounts(request):
     useraccounts = Accounts.objects.filter(user=request.user)
-    return render(request, 'e-branch/accounts.html', {'accounts':useraccounts})
+    form = AccountCreationForm()
+    return render(request, 'e-branch/accounts.html', {'accounts':useraccounts, 'form':form})
 
 
 @login_required(login_url='login')

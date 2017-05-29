@@ -3,6 +3,12 @@ from django.utils import timezone
 from users.models import User
 # Create your models here.
 
+ACCOUNT_TYPE_CHOICES = (
+    ('BİRİKİM HESABI','BİRİKİM HESABI'),
+    ('KREDİLİ MEVDUAT HESABI','KREDİLİ MEVDUAT HESABI'),
+    ('NORMAL HESAP','NORMAL HESAP'),
+    ('EMEKLİLİK HESABI','EMEKLİLİK HESABI'),
+)
 
 class Currency(models.Model):
     currency_type = models.CharField(max_length=50)
@@ -15,7 +21,7 @@ class Accounts(models.Model):
 
     iban = models.CharField(max_length=60, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    account_type = models.CharField(max_length=50)
+    account_type = models.CharField(max_length=50, choices=ACCOUNT_TYPE_CHOICES)
     currency_type = models.ForeignKey(Currency, null=True)
     user = models.ForeignKey(User, null=True, blank=True)
     amount = models.IntegerField()

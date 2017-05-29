@@ -1,5 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
 from users.models import User
+from accounts.models import Accounts, Loan,Transaction,LoanAccountPayment
+from django.forms import ModelForm
 from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
 from django import forms
@@ -38,3 +40,16 @@ class LoginForm(forms.Form):
             raise ValidationError("Yanlış kullanıcı adı veya şifre!")
 
         return self.cleaned_data
+
+class AccountCreationForm(ModelForm):
+    class Meta:
+        model = Accounts
+        fields = [
+            'account_type',
+            'currency_type',
+        ]
+
+    def __init__(self, *args, **kwargs):
+        super(AccountCreationForm, self).__init__(*args, **kwargs)
+        self.fields['account_type'].widget.attrs['class'] = 'form-control'
+        self.fields['currency_type'].widget.attrs['class'] = 'form-control'

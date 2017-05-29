@@ -21,9 +21,12 @@
     <div class="panel panel-primary">
         <div class="panel-heading"><b>Create New Account</b></div>
             <div class="panel-body">
-                <ul class="list-group">
-                  <li class="list-group-item">Created At </li>
-                </ul>
+                <form action="" method="post"  >
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button class="btn btn-lg btn-primary btn-block" type="submit">Create New Account</button>
+                    <!--<input type="submit" value="Login" />-->
+                </form>
             </div>
         </div>
 

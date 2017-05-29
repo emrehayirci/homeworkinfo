@@ -35,7 +35,7 @@ def login(request):
 
 def logout(request):
     auth_logout(request)
-    return redirect('/')
+    return redirect('index')
 
 
 def register(request):
@@ -60,8 +60,9 @@ def register(request):
 
 
 @login_required(login_url='login')
-def accounts (request):
-    return render(request, 'e-branch/accounts.html')
+def accounts(request):
+    useraccounts = Accounts.objects.filter(user=request.user)
+    return render(request, 'e-branch/accounts.html', {'accounts':useraccounts})
 
 
 @login_required(login_url='login')

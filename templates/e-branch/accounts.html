@@ -1,8 +1,30 @@
 {% extends 'e-branch/_authorized.html' %}
 {% block content %}
-    <div class="panel-heading">Panel heading without title</div>
-    <div class="panel-body">
-    Panel content
-    </div>
+    <h3>Your Accounts</h3>
+    {% for account in  accounts %}
+        <div class="panel panel-default">
+            <div class="panel-heading">IBAN : {{ account.iban }}</div>
+            <div class="panel-body">
+                <ul class="list-group">
+                  <li class="list-group-item">Created At : {{ account.created_at }}</li>
+                  <li class="list-group-item">Account Type : {{ account.account_type }}</li>
+                  <li class="list-group-item">Currency Type : {{ account.currency_type }}</li>
+                  <li class="list-group-item"><b>Amount :</b> {{ account.amount }}</li>
+                    {% if account.amount == 0 %}
+                        <li class="list-group-item"><a href="#">Close Account</a></li>
+                    {% endif %}
+
+                </ul>
+            </div>
+        </div>
+    {% endfor %}
+    <div class="panel panel-primary">
+        <div class="panel-heading"><b>Create New Account</b></div>
+            <div class="panel-body">
+                <ul class="list-group">
+                  <li class="list-group-item">Created At </li>
+                </ul>
+            </div>
+        </div>
 
 {% endblock %}

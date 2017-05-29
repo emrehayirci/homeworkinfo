@@ -1,6 +1,13 @@
 {% extends 'e-branch/base.html' %}
 {% block page %}
 <div class="container">
+    {% if messages %}
+	<ul class="messages">
+	    {% for message in messages %}
+	    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+	    {% endfor %}
+	</ul>
+    {% endif %}
     <div class="row profile">
 		<div class="col-md-3">
 			<div class="profile-sidebar">
@@ -12,17 +19,16 @@
 				<!-- SIDEBAR USER TITLE -->
 				<div class="profile-usertitle">
 					<div class="profile-usertitle-name">
-						Marcus Doe
+						{{ user.first_name }} {{ user.last_name }}
 					</div>
 					<div class="profile-usertitle-job">
-						Developer
+						Identity Number: {{ user.identity_number }}
 					</div>
 				</div>
 				<!-- END SIDEBAR USER TITLE -->
 				<!-- SIDEBAR BUTTONS -->
 				<div class="profile-userbuttons">
-					<button type="button" class="btn btn-success btn-sm">Follow</button>
-					<button type="button" class="btn btn-danger btn-sm">Message</button>
+					<button type="button" class="btn btn-danger btn-sm">Log Out</button>
 				</div>
 				<!-- END SIDEBAR BUTTONS -->
 				<!-- SIDEBAR MENU -->
@@ -31,22 +37,22 @@
 						<li class="active">
 							<a href="#">
 							<i class="glyphicon glyphicon-home"></i>
-							Overview </a>
+							Operations </a>
 						</li>
 						<li>
 							<a href="#">
 							<i class="glyphicon glyphicon-user"></i>
-							Account Settings </a>
+							Accounts </a>
 						</li>
 						<li>
 							<a href="#" target="_blank">
 							<i class="glyphicon glyphicon-ok"></i>
-							Tasks </a>
+							Transactions </a>
 						</li>
 						<li>
 							<a href="#">
 							<i class="glyphicon glyphicon-flag"></i>
-							Help </a>
+							Loans </a>
 						</li>
 					</ul>
 				</div>

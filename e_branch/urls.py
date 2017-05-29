@@ -7,5 +7,5 @@ urlpatterns = [
     url(r'^accounts/', accounts, name='accounts'),
     url(r'^$register/', register, name='index'),
     url(r'^$register/', register, name='index'),
-    url(r'^$', index, name='index'),
+    url(r'$', index, name='index'),
 ]

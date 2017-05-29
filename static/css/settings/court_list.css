@@ -9,3 +9,9 @@
     border-style: groove;
     border-radius: 5px;
 }
+
+
+ td a {
+    display:block;
+    width:100%;
+    }

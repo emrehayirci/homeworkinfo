@@ -20,7 +20,7 @@ class User(AbstractBaseUser, PermissionsMixin, models.Model):
     #Photo = models.ImageField(upload_to='Images/', default='Images/None/obama.jpg')    
     is_staff = models.BooleanField(default=False)
     phone_no = models.CharField(max_length=20, blank=True)
-    identity_number = models.CharField(max_length=20, blank=False)
+    identity_number = models.CharField(max_length=20, blank=False, default=0)
     objects = UserManager()
 
     USERNAME_FIELD = 'email'

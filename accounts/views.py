@@ -1,6 +1,6 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import AccountForm
-from .models import Accounts, Currency
+from .models import Accounts, Currency, Transaction
 from IPython import embed
 from users.models import User
 # Create your views here.
@@ -20,7 +20,8 @@ def create_account(request):
     if request.method == 'GET':
         form = AccountForm()
         users = User.objects.all()
-        return render(request, 'create_account.html', {'accountform': form, 'users': users})
+        currencies = Currency.objects.all()
+        return render(request, 'create_account.html', {'accountform': form, 'users': users, 'currencies': currencies})
     elif request.method == 'POST':
         if form.is_valid():
             currency = Currency.objects.filter(pk=request.POST.get('currency_type'))
@@ -98,7 +99,26 @@ def update_currency(request, pk):
         return render(request, 'update_currency.html', {'curreny': c})
     elif request.method == 'POST':
         c = Currency.objects.get(pk=pk)
-        c.currency_type=request.POST.get('currency')
+        c.currency_type = request.POST.get('currency')
         c.save()
         currencies = Currency.objects.all()
         return render(request, 'currency_list.html', {'currencies': currencies})
+
+
+def transactions_list(request):
+    transactions = Transaction.objects.all()
+    return render(request, 'transactions/transactions.html', {'transactions': transactions})
+
+
+def cancel_transaction(request, pk):
+    if request.user.is_staff is True:
+        transaction = get_object_or_404(Transaction, pk=pk)
+        if transaction.cancel_validate_transaction():
+            transaction.cancel_transaction()
+    return redirect('transactions')
+
+
+def delete_transaction(request, pk=None):
+    transaction = get_object_or_404(Transaction, pk=pk)
+    transaction.delete()
+    return redirect('transactions')

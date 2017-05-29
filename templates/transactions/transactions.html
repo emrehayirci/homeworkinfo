@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="box">
+    <div class="col-md-10">
+            <div class="box-header with-border">
+              <h3 class="box-title">TransAction List</h3><br>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <table class="table table-bordered">
+                <tbody><tr>
+                  <th style="width: 10px">Description</th>
+                  <th>Amount</th>
+                  <th>Source Account IBAN</th>
+                  <th>Destination Account IBAN</th>
+                  <th>Source Account's Owner Name</th>
+                  <th>Destination Account's Owner Name</th>
+                  <th>Cancel</th>
+                  <th>Destroy</th>
+                </tr>
+                {% for transaction in transactions %}
+                <tr>
+                  <td>{{ transaction.description }}</td>
+                  <td>{{ transaction.amount }}</td>
+                  <td>
+                      <a href="{% url 'account_update' pk=transaction.sourceaccount.id %}">
+                    {{ transaction.sourceaccount.iban }}
+                          </a>
+                  </td>
+                  <td>
+                      <a href="{% url 'account_update' pk=transaction.destinationaccount.id %}">
+                          {{ transaction.destinationaccount.iban }}
+                          </a>
+                  </td>
+                    <td>{{ transaction.sourceaccount.user.first_name }}</td>
+                  <td>{{ transaction.destinationaccount.user.first_name }}</td>
+                  <td>
+                      {% if transaction.is_done == True %}
+                      <a href="{% url 'cancel_transaction' pk=transaction.id %}" class="btn btn-warning"> Cancel </a>
+                      {% else %}
+                      <button class="btn btn-warning"> Canceled </button>
+                      {% endif %}
+                  </td>
+                  <td>
+                      <a href="{% url 'delete_transaction' pk=transaction.id %}" class="btn btn-danger"> Delete Record </a>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody></table>
+            </div>
+            <!-- /.box-body -->
+
+          </div>
+    </div>
+{% endblock %}

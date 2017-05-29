@@ -11,6 +11,9 @@ urlpatterns = [
     url(r'^update/(?P<pk>[0-9]+)/$', views.account_update, name='account_update'),
     url(r'^update_currency/(?P<pk>[0-9]+)/$', views.update_currency, name='currency_update'),
     url(r'^delete_currency/(?P<pk>[0-9]+)/$', views.delete_currency, name='currency_delete'),
+    url(r'^transaction/(?P<pk>[0-9]+)/$', views.cancel_transaction, name='cancel_transaction'),
+    url(r'^transaction/delete/(?P<pk>[0-9]+)/$', views.delete_transaction, name='delete_transaction'),
+    url(r'^transactions/$', views.transactions_list, name='transactions'),
     url(r'$', views.settings, name='settings'),
     
 ]

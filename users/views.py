@@ -63,7 +63,6 @@ def create_user(request):
         Address.objects.create(street=request.POST.get('street'), district=request.POST.get('district'),
                                zipcode=request.POST.get('zipcode'), city=request.POST.get('city'),
                                no=request.POST.get('no'), user=user)
-        embed()
         return redirect('users')
 
 
@@ -93,3 +92,7 @@ def edit_user(request, pk):
         return redirect('users')
 
 
+def delete_user(request, pk=None):
+    user = get_object_or_404(User, pk=pk)
+    user.delete()
+    return redirect('users')

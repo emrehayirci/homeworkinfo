@@ -12,7 +12,7 @@ from django.contrib.auth import (
 
 @login_required(login_url='login')
 def index(request):
-    return render(request, 'e-branch/_authorized.html')
+    return redirect('accounts')
 
 
 def login(request):
@@ -27,6 +27,7 @@ def login(request):
                 request,
                 'Giriş yaptınız.'
             )
+            return redirect('index')
 
     return render(request, 'e-branch/login.html', {
         'form': form

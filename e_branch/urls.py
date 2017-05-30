@@ -8,5 +8,6 @@ urlpatterns = [
     url(r'^accounts/', accounts, name='accounts'),
     url(r'^loans/', loans, name='loans'),
     url(r'^transactions/', transactions, name='transactions'),
+    url(r'^logout/', logout, name='logout'),
     url(r'^$', index, name='index'),
 ]

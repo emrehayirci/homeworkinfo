@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="box">
+            <div class="box-header with-border">
+              <h3 class="box-title">Bordered Table</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <table class="table table-bordered">
+                <tbody><tr>
+                  <th>IBAN</th>
+                  <th>Amount</th>
+                  <th>Installement Number</th>
+                  <th>Start Date</th>
+                  <th>Finish Date</th>
+                  <th>Customer Name</th>
+                </tr>
+                {% for loan in loans %}
+                <tr class='clickable-row' data-href="{% url 'loan_detail' pk=loan.id %}">
+                  <td>{{ loan.account.iban }}</td>
+                  <td>{{ loan.amount }}</td>
+                  <td>{{ loan.installment }}
+                  </td>
+                  <td>
+                  {{ loan.start_date|date }}</td>
+                <td>{{ loan.finish_date|date }}</td>
+                <td>{{ loan.account.user.first_name }}</td>
+                </tr>
+                {% endfor %}
+              </tbody></table>
+            </div>
+            <!-- /.box-body -->
+        <script>
+            jQuery(document).ready(function($) {
+    $(".clickable-row").click(function() {
+        window.location = $(this).data("href");
+    });
+});
+        </script>
+{% endblock %}

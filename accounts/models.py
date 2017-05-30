@@ -58,7 +58,7 @@ class Transaction(models.Model):
     currency_type = models.ForeignKey(Currency)
     sourceaccount = models.ForeignKey(Accounts, related_name='source_account')
     destinationaccount = models.ForeignKey(Accounts, related_name='destination_account')
-    sending_date = models.DateField()
+    sending_date = models.DateField(auto_now_add=True)
     is_done = models.BooleanField(default=False)
 
     def make_transaction(self):

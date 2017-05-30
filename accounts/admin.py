@@ -5,4 +5,9 @@ admin.site.register(Accounts)
 admin.site.register(Currency)
 admin.site.register(Transaction)
 admin.site.register(Loan)
+<<<<<<< HEAD
 admin.site.register(LoanAccountPayment)
+=======
+admin.site.register(LoanAccountPayment)
+
+>>>>>>> yavuz

@@ -2,34 +2,33 @@
 {% load staticfiles %}
 {% block content %}
     <link rel="stylesheet" href="{% static 'css/settings/court_list.css' %}">
-    <div class="col-md-offset-5">
-
-        </div>
 
     <div class="col-md-10">
-    
-    <div class="row center">
-
-    </div>
-
-    <div class="row center">
-        
-    </div>
-        <div class="row">
         <ul class="list-group">
             {% if accountform %}
                 <h2> Create Account </h2>
                 <form action={% url 'create_account'%} method='POST' >
                 {{ accountform }}
                 {% csrf_token %}
+                <div class="form-group">
+                    <label> Hesap Tipi </label>
+                    <select name="account_type" class="form-control">
+                        <option value="BİRİKİM HESABI">BİRİKİM HESABI</option>
+                        <option value="KREDİLİ MEVDUAT HESABI">KREDİLİ MEVDUAT HESABI</option>
+                        <option value="NORMAL HESAP"> NORMAL HESAP </option>
+                        <option value="EMEKLİLİK HESABI"> EMEKLİLİK HESABI </option>
+                    </select>
+                </div>
+
                     <div class="form-group">
-                    <label for="">Currency Type</label>
+                        <label>Currency Type</label>
                         <select class="form-control" name="currency_type">
                             {% for currency in currencies %}
                                 <option value="{{ currency.id }}">{{ currency.currency_type }}</option>
                             {% endfor %}
                         </select>
                     </div>
+
                 <div class="form-group">
                     <label> Choose User </label>
                     <select name="user_id" class="form-control">
@@ -42,15 +41,15 @@
                 <div class='form-group' style='padding-left: 90%; padding-top: 15px;'>
                     <input type="submit" class="btn btn-primary" value='Submit'>
                 </div>
+                </form>
             {% endif %}
-        </div>
         </ul>
     </div>
         
-        <hr>
 
 
 
-    </div>
+
+
 
 {% endblock %}

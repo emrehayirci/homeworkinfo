@@ -1,0 +1,45 @@
+{% extends 'e-branch/_authorized.html' %}
+{% block content %}
+    <h3>Your Loans</h3>
+    {% for loan in  loans %}
+        <div class="panel panel-default">
+            <div class="panel-heading">Account for Loan IBAN : {{ loan.account.iban }}</div>
+            <div class="panel-body">
+                <ul class="list-group">
+                    <li class="list-group-item">Created At : {{ loan.account.created_at }}</li>
+                    <li class="list-group-item">Currency Type : {{ loan.account.currency_type }}</li>
+                    <li class="list-group-item"><b>Installment:</b> {{ loan.installment }}</li>
+                    <li class="list-group-item"><b>Amount :</b> {{ loan.amount }}</li>
+                    <li class="list-group-item"><b>Interest Rate :</b> {{ loan.interest_rate }}</li>
+                    <li class="list-group-item"><b>Start Date :</b> {{ loan.start_date }}</li>
+                    <li class="list-group-item"><b>Finish Date :</b> {{ loan.finish_date }}</li>
+                </ul>
+            </div>
+        </div>
+    {% endfor %}
+    <div class="panel panel-primary">
+        <div class="panel-heading"><b>Create New Loan</b></div>
+            <div class="panel-body">
+                <h3>Our Interest Rate for Loan is %2</h3>
+                <form action="" method="post"  >
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button class="btn btn-lg btn-primary btn-block" type="submit">Get Your Loan</button>
+                    <!--<input type="submit" value="Login" />-->
+                </form>
+            </div>
+        </div>
+        <div class="panel panel-danger">
+            <div class="panel-heading"><b>Unpaid Loan Debts</b></div>
+            <div class="panel-body">
+                {% for debt in unpaid %}
+                <ul class="list-group">
+                    <li class="list-group-item"><b>From Loan with IBAN Number of :</b> {{ debt.account.iban }}</li>
+                    <li class="list-group-item"><b>Amount : </b>{{ debt.amount }}</li>
+                    <li class="list-group-item"><b>Installment Number:</b> {{ debt.installment_number }}</li>
+                    <li class="list-group-item"><b>Due Date :</b> {{ debt.finish_date }}</li>
+                </ul>
+                {% endfor %}
+            </div>
+        </div>
+{% endblock %}

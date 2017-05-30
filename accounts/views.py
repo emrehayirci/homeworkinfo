@@ -1,8 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import AccountForm
-from .models import Accounts, Currency, Transaction, ACCOUNT_TYPE_CHOICES
+from .models import Accounts, Currency, Transaction, ACCOUNT_TYPE_CHOICES, LoanAccountPayment, Loan
 from IPython import embed
 from users.models import User
+from rest_framework.decorators import api_view, permission_classes
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.response import Response
+from django.contrib.auth.hashers import make_password
 # Create your views here.
 
 
@@ -120,3 +124,47 @@ def delete_transaction(request, pk=None):
     transaction = get_object_or_404(Transaction, pk=pk)
     transaction.delete()
     return redirect('transactions')
+
+
+def loan_list(request):
+    loans = Loan.objects.all()
+    return render(request, 'loans/loans.html', {'loans': loans})
+
+
+def loan_detail(request, pk=None):
+    loan = get_object_or_404(Loan, pk=pk)
+    loans_payments = LoanAccountPayment.objects.filter(loan=loan)
+    return render(request, 'loans/loan_detail.html', {'loan': loan, 'loans_payments': loans_payments})
+
+
+def pay(request, pk=None):
+    loan_payment = get_object_or_404(LoanAccountPayment, pk=pk)
+    if loan_payment.is_paid is True:
+        LoanAccountPayment.objects.filter(pk=pk).update(is_paid=False)
+    else:
+        LoanAccountPayment.objects.filter(pk=pk).update(is_paid=True)
+    return redirect('loan_detail', pk=loan_payment.loan.id)
+
+
+@api_view(['POST', 'GET'])
+def api_transaction(request):
+    s_a = get_object_or_404(Accounts, iban=request.data.get('source_account'))
+    d_a = get_object_or_404(Accounts, iban=request.data.get('destination_account'))
+    amount = int(request.data.get('amount'))
+    t = Transaction.objects.create(description=request.data.get('description'), amount=amount,
+                                   sourceaccount=s_a, destinationaccount=d_a, currency_type=s_a.currency_type)
+    if t.validate_transaction():
+        t = t.make_transaction()
+        return Response({'IsSuccess': True, 'bank_receiptID': t.id})
+    else:
+        return Response({'IsSuccess': False, 'context': 'Credit is not enough'})
+
+
+@api_view(['GET'])
+def query_receipt(request, pk):
+    t = Transaction.objects.filter(pk=pk)
+    if len(t) > 0:
+        return Response({'IsExist': True})
+    else:
+        return Response({'IsExist': False})
+

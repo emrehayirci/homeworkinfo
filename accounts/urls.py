@@ -1,5 +1,5 @@
 from django.conf.urls import url
-
+from django.views.decorators.csrf import csrf_exempt
 from . import views
 
 urlpatterns = [
@@ -13,7 +13,12 @@ urlpatterns = [
     url(r'^delete_currency/(?P<pk>[0-9]+)/$', views.delete_currency, name='currency_delete'),
     url(r'^transaction/(?P<pk>[0-9]+)/$', views.cancel_transaction, name='cancel_transaction'),
     url(r'^transaction/delete/(?P<pk>[0-9]+)/$', views.delete_transaction, name='delete_transaction'),
+    url(r'^transaction/api/$', views.api_transaction),
+    url(r'^query/receipt/(?P<pk>[0-9]+)/$', views.query_receipt,),
     url(r'^transactions/$', views.transactions_list, name='transactions'),
+    url(r'^loan/(?P<pk>[0-9]+)/$', views.loan_detail, name='loan_detail'),
+    url(r'^loan/pay/(?P<pk>[0-9]+)/$', views.pay, name='pay'),
+    url(r'^loans/$', views.loan_list, name='loans'),
     url(r'$', views.settings, name='settings'),
     
 ]

@@ -25,7 +25,7 @@ SECRET_KEY = '^h@p6d3!k8du!#w1=0@j3+5#342=ksvum&&m3kqei^u69@3oon'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['146.185.147.162']
 
 
 # Application definition
@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users.apps.UsersConfig',
     'accounts.apps.AccountsConfig',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
@@ -81,6 +82,22 @@ DATABASES = {
         #'NAME': 'C:/Users/02483901/Desktop/homeworkinfo/ebank.sqlite',
         'NAME': 'ebank.sqlite',
     }
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+      # 'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+       'rest_framework.authentication.TokenAuthentication',
+       'rest_framework.authentication.SessionAuthentication',
+       'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+    ),
+    'DEFAULT_RENDERER_CLASSES': (
+        # 'rest_framework_jsonp.renderers.JSONPRenderer',
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    )
 }
 
 

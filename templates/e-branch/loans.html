@@ -29,5 +29,17 @@
                 </form>
             </div>
         </div>
-
+        <div class="panel panel-danger">
+            <div class="panel-heading"><b>Unpaid Loan Debts</b></div>
+            <div class="panel-body">
+                {% for debt in unpaid %}
+                <ul class="list-group">
+                    <li class="list-group-item"><b>From Loan with IBAN Number of :</b> {{ debt.account.iban }}</li>
+                    <li class="list-group-item"><b>Amount : </b>{{ debt.amount }}</li>
+                    <li class="list-group-item"><b>Installment Number:</b> {{ debt.installment_number }}</li>
+                    <li class="list-group-item"><b>Due Date :</b> {{ debt.finish_date }}</li>
+                </ul>
+                {% endfor %}
+            </div>
+        </div>
 {% endblock %}

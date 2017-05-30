@@ -79,7 +79,7 @@ def accounts(request):
 @login_required(login_url='login')
 def loans (request):
     form = LoanCreationForm()
-    unpaidDebt = LoanAccountPayment.objects.filter(account__user = request.user.id)
+    unpaidDebt = LoanAccountPayment.objects.filter(account__user = request.user.id, is_active=True, is_paid=False)
     currentloans = Loan.objects.filter(account__user = request.user.id)
     if request.method == 'POST':
         form = LoanCreationForm(request.POST, request=request)

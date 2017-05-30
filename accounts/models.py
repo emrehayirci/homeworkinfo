@@ -28,11 +28,11 @@ class Accounts(models.Model):
     amount = models.IntegerField()
 
     def __str__(self):
-        return 'Account owner is : ' + self.user.first_name + ' IBAN no is : ' + self.iban
+        return 'with ID : ' +  str(self.id)
+        #return 'Account owner is : ' + self.user.first_name + ' IBAN no is : ' + self.iban
 
 
 class Loan(models.Model):
-
     account = models.ForeignKey(Accounts)
     interest_rate = models.DecimalField(max_digits=4, decimal_places=2, blank=True, default=0)
     installment = models.IntegerField(default=1)
@@ -43,14 +43,13 @@ class Loan(models.Model):
 
 
 class LoanAccountPayment(models.Model):
-
     account = models.ForeignKey(Accounts)
     loan = models.ForeignKey(Loan)
     installment_number = models.IntegerField()
     is_paid = models.BooleanField(default=False)
     finish_date = models.DateField()
     is_active = models.BooleanField(default=True)
-
+    amount = models.IntegerField()
 
 class Transaction(models.Model):
 

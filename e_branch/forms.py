@@ -1,8 +1,8 @@
-from datetime import datetime
+from _datetime import date, timedelta
 from random import Random
 from django.contrib.auth.forms import UserCreationForm
 from users.models import User
-from accounts.models import Accounts, Loan,Transaction,LoanAccountPayment
+from accounts.models import Accounts, Loan,Transaction,LoanAccountPayment, Currency
 from django.forms import ModelForm
 from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
@@ -72,11 +72,53 @@ class AccountCreationForm(ModelForm):
         instance = super(AccountCreationForm, self).save(commit=False)
         instance.iban = generateIban()
         instance.amount = 0
-        instance.created_at = datetime.now()
+        instance.created_at = date.today()
         instance.user = user
         if commit:
             instance.save()
         return instance
 
 
+class LoanCreationForm(forms.Form):
+    amount = forms.IntegerField(required=True, widget=forms.NumberInput(attrs={'class':'form-control'}))
+    installment = forms.CharField(widget=forms.NumberInput(attrs={'class':'form-control'}), required=True)
 
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super(LoanCreationForm, self).__init__(*args, **kwargs)
+
+    def clean(self):
+        amount = self.cleaned_data.get("amount")
+        installment = self.cleaned_data.get("installment")
+        user = self.request.user
+        if not amount or not installment:
+            return self.cleaned_data
+
+        newloan = Loan()
+        newloan.amount = int(amount)
+        newloan.installment = int(installment)
+        newloan.start_date = date.today()
+        newloan.finish_date = date.today() + timedelta(weeks=4 * int(installment));
+        newloan.interest_rate = 0.2
+
+        loanAccount = Accounts()
+        loanAccount.iban = generateIban()
+        loanAccount.account_type = "Loan Account"
+        loanAccount.amount = int(amount)
+        loanAccount.created_at = date.today()
+        loanAccount.currency_type = Currency.objects.first()
+        loanAccount.user = user
+        loanAccount.save()
+        newloan.account = loanAccount
+        newloan.save()
+        for i in range(1, int(installment) + 1 ):
+            monthlypayment = LoanAccountPayment()
+            monthlypayment.account = loanAccount
+            monthlypayment.finish_date = date.today() + timedelta(weeks= (4 * i));
+            monthlypayment.installment_number  = i
+            monthlypayment.is_paid = False
+            monthlypayment.is_active = True
+            monthlypayment.loan = newloan
+            monthlypayment.amount = 1.2 * (int(amount) / int(installment))
+            monthlypayment.save()
+        return self.cleaned_data

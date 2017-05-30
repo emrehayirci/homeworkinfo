@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from accounts.models import *
 from users.models import User
 from django.contrib import messages
-from e_branch.forms import RegistrationForm, LoginForm, AccountCreationForm
+from e_branch.forms import RegistrationForm, LoginForm, AccountCreationForm, LoanCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import (
     login as auth_login,
@@ -78,7 +78,18 @@ def accounts(request):
 
 @login_required(login_url='login')
 def loans (request):
-    return render(request, 'e-branch/loans.html')
+    form = LoanCreationForm()
+    unpaidDebt = LoanAccountPayment.objects.filter(account__user = request.user.id)
+    currentloans = Loan.objects.filter(account__user = request.user.id)
+    if request.method == 'POST':
+        form = LoanCreationForm(request.POST, request=request)
+
+        if form.is_valid():
+            messages.info(
+                request,
+                'New Loan Created!'
+            )
+    return render(request, 'e-branch/loans.html', {'loans':currentloans, 'form':form, 'unpaid':unpaidDebt})
 
 
 @login_required(login_url='login')

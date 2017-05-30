@@ -8,8 +8,20 @@
             {% if accountform %}
                 <h2> Update Account </h2>
                 <form action={% url 'account_update' pk=account_id %} method='POST' >
-                {{ accountform }}
-                {% csrf_token %}
+                    {% csrf_token %}
+                    {{ accountform }}
+
+
+                 <div class="form-group">
+                    <label> Hesap Tipi </label>
+                    <select name="account_type" class="form-control">
+                        <option value="BİRİKİM HESABI">BİRİKİM HESABI</option>
+                        <option value="KREDİLİ MEVDUAT HESABI">KREDİLİ MEVDUAT HESABI</option>
+                        <option value="NORMAL HESAP"> NORMAL HESAP </option>
+                        <option value="EMEKLİLİK HESABI"> EMEKLİLİK HESABI </option>
+                    </select>
+                </div>
+
                     <label> Currency Type </label>
                     <div class="form-group">
                         <select class="form-control" name="currency_type">
@@ -19,6 +31,7 @@
                             {% endfor %}
                         </select>
                     </div>
+
                 <div class="form-group">
                     <select name="user_id">
                         <option value="{{ user.id }}">{{ user.email }}</option>
@@ -28,10 +41,12 @@
                     </select>
 
                 </div>
+
                 <div class='form-group' style='padding-left: 90%; padding-top: 15px;'>
                     <input type="submit" class="btn btn-primary" value='Submit'>
                     <a href="{% url 'account_delete' pk=account_id %}" class="btn btn-danger">Destroy</a>
                 </div>
+
                 </form>
             {% endif %}
     </div>

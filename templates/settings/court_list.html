@@ -30,6 +30,7 @@
                   <th>IBAN</th>
                   <th>Credit</th>
                   <th style="width: 40px">Currency Type</th>
+                  <th style="width: 40px">Account Type</th>
                   <th style="width: 40px;">Edit</th>
                   <th style="width: 40px;">Destroy</th>
                 </tr>
@@ -38,6 +39,7 @@
                   <td>{{ account.user.first_name }}</td>
                   <td>{{ account.iban }}</td>
                   <td>{{ account.amount }}</td>
+                  <td>{{ account.account_type }}</td>
                   <td>{{ account.currency_type }}</td>
                   <td>
                       <a href={% url 'account_update' pk=account.id %} style="padding-left:60%;">

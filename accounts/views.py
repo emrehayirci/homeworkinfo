@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import AccountForm
-from .models import Accounts, Currency, Transaction
+from .models import Accounts, Currency, Transaction, ACCOUNT_TYPE_CHOICES
 from IPython import embed
 from users.models import User
 # Create your views here.
@@ -21,22 +21,19 @@ def create_account(request):
         form = AccountForm()
         users = User.objects.all()
         currencies = Currency.objects.all()
-        return render(request, 'create_account.html', {'accountform': form, 'users': users, 'currencies': currencies})
+
+        return render(request, 'create_account.html', {'accountform': form, 'users': users, 'currencies': currencies,
+                                                       'choices': ACCOUNT_TYPE_CHOICES})
     elif request.method == 'POST':
-        if form.is_valid():
-            currency = Currency.objects.filter(pk=request.POST.get('currency_type'))
-            if len(currency) > 0:
-                currency = currency[0]
-            else:
-                currency = Currency.objects.first()
-            Accounts.objects.create(iban=request.POST.get('iban'), account_type=request.POST.get('account_type'),
-                                    user_id=request.POST.get('user_id'), currency_type=currency,
-                                    amount=request.POST.get('amount'))
-            # account = form.save(user=request.user)
-            # account.currency_type = currency
-            # account.user = request.user
-            # account.save()
-            return redirect('settings')
+        currency = Currency.objects.filter(pk=request.POST.get('currency_type'))
+        if len(currency) > 0:
+            currency = currency[0]
+        else:
+            currency = Currency.objects.first()
+        Accounts.objects.create(iban=request.POST.get('iban'), account_type=request.POST.get('account_type'),
+                                user_id=request.POST.get('user_id'), currency_type=currency,
+                                amount=request.POST.get('amount'))
+        return redirect('settings')
     else:
         return redirect('settings')
 
@@ -64,6 +61,7 @@ def account_update(request, pk):
     elif request.method == 'POST':
         obj = Accounts.objects.get(pk=pk)
         form = AccountForm(request.POST, instance=obj)
+        form.instance.account_type = request.POST.get('account_type')
         form.save()
         obj.currency_type_id = request.POST.get('currency_type')
         obj.user_id = request.POST.get('user_id')

@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
 from django import forms
 
+
 class RegistrationForm(UserCreationForm):
     class Meta:
         fields = ['email', 'first_name', 'last_name', 'identity_number']
@@ -21,9 +22,11 @@ class RegistrationForm(UserCreationForm):
         self.fields['last_name'].widget.attrs['class'] = 'form-control'
         self.fields['identity_number'].widget.attrs['class'] = 'form-control'
 
+
 class LoginForm(forms.Form):
     email = forms.CharField(required=True, widget=forms.TextInput(attrs={'class':'form-control'}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control'}), required=True)
+
     def clean(self):
         email = self.cleaned_data.get("email")
         password = self.cleaned_data.get("password")
@@ -40,6 +43,7 @@ class LoginForm(forms.Form):
             raise ValidationError("Yanlış kullanıcı adı veya şifre!")
 
         return self.cleaned_data
+
 
 class AccountCreationForm(ModelForm):
     class Meta:

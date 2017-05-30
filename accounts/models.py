@@ -28,7 +28,7 @@ class Accounts(models.Model):
     amount = models.IntegerField()
 
     def __str__(self):
-        return 'with ID : ' +  str(self.id)
+        return 'with IBAN : ' +  str(self.iban)
         #return 'Account owner is : ' + self.user.first_name + ' IBAN no is : ' + self.iban
 
 

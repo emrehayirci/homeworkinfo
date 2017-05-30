@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from accounts.models import *
 from users.models import User
 from django.contrib import messages
-from e_branch.forms import RegistrationForm, LoginForm, AccountCreationForm, LoanCreationForm
+from e_branch.forms import RegistrationForm, TransactionCreationForm, LoginForm, AccountCreationForm, LoanCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import (
     login as auth_login,
@@ -94,4 +94,13 @@ def loans (request):
 
 @login_required(login_url='login')
 def transactions (request):
-    return render(request, 'e-branch/transactions.html')
+    form = TransactionCreationForm(request=request)
+    transaction_history = Transaction.objects.filter(sourceaccount__user=request.user, is_done=True)
+    if request.method == 'POST':
+        form = TransactionCreationForm(request.POST, request=request)
+        if form.is_valid():
+            messages.info(
+                request,
+                'New Transactions Created!'
+            )
+    return render(request, 'e-branch/transactions.html' , {'form':form, 'transactions':transaction_history})

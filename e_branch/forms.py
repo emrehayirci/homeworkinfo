@@ -117,8 +117,45 @@ class LoanCreationForm(forms.Form):
             monthlypayment.finish_date = date.today() + timedelta(weeks= (4 * i));
             monthlypayment.installment_number  = i
             monthlypayment.is_paid = False
-            monthlypayment.is_active = True
+            monthlypayment.is_acti.ve = True
             monthlypayment.loan = newloan
             monthlypayment.amount = 1.2 * (int(amount) / int(installment))
             monthlypayment.save()
         return self.cleaned_data
+
+class TransactionCreationForm(forms.Form):
+    description = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
+    amount = forms.IntegerField(widget=forms.NumberInput(attrs={'class':'form-control'}))
+    #currency_type = forms.ForeignKey(Currency)
+    sourceiban = forms.ModelChoiceField(queryset=Accounts.objects.all(), widget=forms.Select(attrs={'class':'form-control'}))
+    destinationiban = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super(TransactionCreationForm, self).__init__(*args, **kwargs)
+
+        if self.request:
+            self.fields['sourceiban'].queryset = Accounts.objects.filter(user=self.request.user)
+
+    def clean(self):
+        description = self.cleaned_data.get("description")
+        amount = self.cleaned_data.get("amount")
+        #currencytype = "lol"
+        source = self.cleaned_data.get("sourceiban")
+        destinationiban = self.cleaned_data.get("destinationiban")
+        if source.user != self.request.user:
+            raise ValidationError("This is not your Account")
+        try:
+            destination = Accounts.objects.get(iban = destinationiban)
+        except Accounts.DoesNotExist:
+            raise ValidationError("Wrong Destination IBAN")
+        if source.amount > amount:
+            transaction = Transaction()
+            transaction.amount = amount
+            transaction.sourceaccount = source
+            transaction.destinationaccount = destination
+            transaction.currency_type = source.currency_type
+            transaction.sending_date = date.today()
+            transaction.make_transaction()
+        else:
+            raise ValidationError("Not Enough Account Balance")

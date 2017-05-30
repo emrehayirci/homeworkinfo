@@ -9,7 +9,6 @@ from django.core.exceptions import ValidationError
 from django import forms
 
 
-<<<<<<< HEAD
 def generateIban():
     random = Random()
     result = 'TR24'
@@ -19,9 +18,6 @@ def generateIban():
             result += str(random.randint(0, 9))
     return result
 
-
-=======
->>>>>>> yavuz
 class RegistrationForm(UserCreationForm):
     class Meta:
         fields = ['email', 'first_name', 'last_name', 'identity_number']
@@ -123,7 +119,7 @@ class LoanCreationForm(forms.Form):
             monthlypayment.finish_date = date.today() + timedelta(weeks= (4 * i));
             monthlypayment.installment_number  = i
             monthlypayment.is_paid = False
-            monthlypayment.is_acti.ve = True
+            monthlypayment.is_active = True
             monthlypayment.loan = newloan
             monthlypayment.amount = 1.2 * (int(amount) / int(installment))
             monthlypayment.save()

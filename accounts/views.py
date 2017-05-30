@@ -117,13 +117,13 @@ def cancel_transaction(request, pk):
         transaction = get_object_or_404(Transaction, pk=pk)
         if transaction.cancel_validate_transaction():
             transaction.cancel_transaction()
-    return redirect('transactions')
+    return redirect('transactions_a')
 
 
 def delete_transaction(request, pk=None):
     transaction = get_object_or_404(Transaction, pk=pk)
     transaction.delete()
-    return redirect('transactions')
+    return redirect('transactions_a')
 
 
 def loan_list(request):

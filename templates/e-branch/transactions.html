@@ -6,9 +6,10 @@
             <div class="panel-heading">Destination IBAN : {{ transaction.destinationaccount.iban }}</div>
             <div class="panel-body">
                 <ul class="list-group">
-                  <li class="list-group-item">Send At : {{ transaction.sending_date }}</li>
-                  <li class="list-group-item">Amount : {{ transaction.amount }}</li>
-                  <li class="list-group-item">From Iban : {{ transaction.sourceaccount.iban }}</li>
+                    <li class="list-group-item">Description : {{ transaction.description }}</li>
+                    <li class="list-group-item">Send At : {{ transaction.sending_date }}</li>
+                    <li class="list-group-item">Amount : {{ transaction.amount }}</li>
+                    <li class="list-group-item">From Iban : {{ transaction.sourceaccount.iban }}</li>
                 </ul>
             </div>
         </div>
@@ -19,8 +20,7 @@
                 <form action="" method="post"  >
                     {% csrf_token %}
                     {{ form.as_p }}
-                    <button class="btn btn-lg btn-primary btn-block" type="submit">Create New Account</button>
-                    <!--<input type="submit" value="Login" />-->
+                    <button class="btn btn-lg btn-primary btn-block" type="submit">Make Transaction</button>
                 </form>
             </div>
         </div>

@@ -74,14 +74,14 @@ def accounts(request):
                 request,
                 'New Account Created!'
             )
-    return render(request, 'e-branch/accounts.html', {'accounts':useraccounts, 'form':form})
+    return render(request, 'e-branch/accounts.html', {'accounts': useraccounts, 'form': form})
 
 
 @login_required(login_url='login')
-def loans (request):
+def loans(request):
     form = LoanCreationForm()
-    unpaidDebt = LoanAccountPayment.objects.filter(account__user = request.user.id, is_active=True, is_paid=False)
-    currentloans = Loan.objects.filter(account__user = request.user.id)
+    unpaid_debt = LoanAccountPayment.objects.filter(account__user=request.user.id, is_active=True, is_paid=False)
+    currentloans = Loan.objects.filter(account__user=request.user.id)
     if request.method == 'POST':
         form = LoanCreationForm(request.POST, request=request)
 
@@ -90,11 +90,11 @@ def loans (request):
                 request,
                 'New Loan Created!'
             )
-    return render(request, 'e-branch/loans.html', {'loans':currentloans, 'form':form, 'unpaid':unpaidDebt})
+    return render(request, 'e-branch/loans.html', {'loans': currentloans, 'form': form, 'unpaid': unpaid_debt})
 
 
 @login_required(login_url='login')
-def transactions (request):
+def transactions(request):
     form = TransactionCreationForm(request=request)
     transaction_history = Transaction.objects.filter(sourceaccount__user=request.user, is_done=True)
     if request.method == 'POST':
@@ -104,4 +104,4 @@ def transactions (request):
                 request,
                 'New Transactions Created!'
             )
-    return render(request, 'e-branch/transactions.html' , {'form':form, 'transactions':transaction_history})
+    return render(request, 'e-branch/transactions.html', {'form': form, 'transactions': transaction_history})

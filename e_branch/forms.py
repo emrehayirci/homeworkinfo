@@ -1,15 +1,15 @@
-from _datetime import date, timedelta
+from datetime import date, timedelta
 from random import Random
 from django.contrib.auth.forms import UserCreationForm
 from users.models import User
-from accounts.models import Accounts, Loan,Transaction,LoanAccountPayment, Currency
+from accounts.models import Accounts, Loan, Transaction, LoanAccountPayment, Currency
 from django.forms import ModelForm
 from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
 from django import forms
 
 
-def generateIban():
+def generate_iban():
     random = Random()
     result = 'TR24'
     for i in range(0, 4):
@@ -17,6 +17,7 @@ def generateIban():
         for j in range(0, 4):
             result += str(random.randint(0, 9))
     return result
+
 
 class RegistrationForm(UserCreationForm):
     class Meta:
@@ -35,8 +36,8 @@ class RegistrationForm(UserCreationForm):
 
 
 class LoginForm(forms.Form):
-    email = forms.CharField(required=True, widget=forms.TextInput(attrs={'class':'form-control'}))
-    password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control'}), required=True)
+    email = forms.CharField(required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}), required=True)
 
     def clean(self):
         email = self.cleaned_data.get("email")
@@ -72,7 +73,7 @@ class AccountCreationForm(ModelForm):
 
     def save(self, user, commit=True):
         instance = super(AccountCreationForm, self).save(commit=False)
-        instance.iban = generateIban()
+        instance.iban = generate_iban()
         instance.amount = 0
         instance.created_at = date.today()
         instance.user = user
@@ -82,8 +83,8 @@ class AccountCreationForm(ModelForm):
 
 
 class LoanCreationForm(forms.Form):
-    amount = forms.IntegerField(required=True, widget=forms.NumberInput(attrs={'class':'form-control'}))
-    installment = forms.CharField(widget=forms.NumberInput(attrs={'class':'form-control'}), required=True)
+    amount = forms.IntegerField(required=True, widget=forms.NumberInput(attrs={'class': 'form-control'}))
+    installment = forms.CharField(widget=forms.NumberInput(attrs={'class': 'form-control'}), required=True)
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
@@ -96,41 +97,42 @@ class LoanCreationForm(forms.Form):
         if not amount or not installment:
             return self.cleaned_data
 
-        newloan = Loan()
-        newloan.amount = int(amount)
-        newloan.installment = int(installment)
-        newloan.start_date = date.today()
-        newloan.finish_date = date.today() + timedelta(weeks=4 * int(installment));
-        newloan.interest_rate = 0.2
+        new_loan = Loan()
+        new_loan.amount = int(amount)
+        new_loan.installment = int(installment)
+        new_loan.start_date = date.today()
+        new_loan.finish_date = date.today() + timedelta(weeks=4 * int(installment))
+        new_loan.interest_rate = 0.2
 
-        loanAccount = Accounts()
-        loanAccount.iban = generateIban()
-        loanAccount.account_type = "Loan Account"
-        loanAccount.amount = int(amount)
-        loanAccount.created_at = date.today()
-        loanAccount.currency_type = Currency.objects.first()
-        loanAccount.user = user
-        loanAccount.save()
-        newloan.account = loanAccount
-        newloan.save()
-        for i in range(1, int(installment) + 1 ):
+        loan_account = Accounts()
+        loan_account.iban = generate_iban()
+        loan_account.account_type = "Loan Account"
+        loan_account.amount = int(amount)
+        loan_account.created_at = date.today()
+        loan_account.currency_type = Currency.objects.first()
+        loan_account.user = user
+        loan_account.save()
+        new_loan.account = loan_account
+        new_loan.save()
+        for i in range(1, int(installment) + 1):
             monthlypayment = LoanAccountPayment()
-            monthlypayment.account = loanAccount
-            monthlypayment.finish_date = date.today() + timedelta(weeks= (4 * i));
-            monthlypayment.installment_number  = i
+            monthlypayment.account = loan_account
+            monthlypayment.finish_date = date.today() + timedelta(weeks=(4 * i))
+            monthlypayment.installment_number = i
             monthlypayment.is_paid = False
             monthlypayment.is_active = True
-            monthlypayment.loan = newloan
+            monthlypayment.loan = new_loan
             monthlypayment.amount = 1.2 * (int(amount) / int(installment))
             monthlypayment.save()
         return self.cleaned_data
 
+
 class TransactionCreationForm(forms.Form):
-    description = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
-    amount = forms.IntegerField(widget=forms.NumberInput(attrs={'class':'form-control'}))
-    #currency_type = forms.ForeignKey(Currency)
-    sourceiban = forms.ModelChoiceField(queryset=Accounts.objects.all(), widget=forms.Select(attrs={'class':'form-control'}))
-    destinationiban = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
+    description = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+    amount = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control'}))
+    sourceiban = forms.ModelChoiceField(queryset=Accounts.objects.all(),
+                                        widget=forms.Select(attrs={'class': "form-control"}))
+    destinationiban = forms.CharField(widget=forms.TextInput(attrs={'class': "form-control"}))
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
@@ -142,7 +144,6 @@ class TransactionCreationForm(forms.Form):
     def clean(self):
         description = self.cleaned_data.get("description")
         amount = self.cleaned_data.get("amount")
-        #currencytype = "lol"
         source = self.cleaned_data.get("sourceiban")
         destinationiban = self.cleaned_data.get("destinationiban")
         if source.user != self.request.user:
@@ -154,6 +155,7 @@ class TransactionCreationForm(forms.Form):
         if source.amount > amount:
             transaction = Transaction()
             transaction.amount = amount
+            transaction.description = description
             transaction.sourceaccount = source
             transaction.destinationaccount = destination
             transaction.currency_type = source.currency_type

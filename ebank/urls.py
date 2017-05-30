@@ -22,5 +22,5 @@ urlpatterns = [
     url(r'^accounts/', include('accounts.urls')),
     url(r'^api/', include('rest_framework.urls', namespace='rest')),
     url(r'^users/', include('users.urls')),
-    url(r'^e-brach/', include('e_branch.urls')),
+    url(r'^e-branch/', include('e_branch.urls')),
 ]

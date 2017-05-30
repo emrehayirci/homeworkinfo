@@ -63,6 +63,16 @@ def register(request):
 def accounts(request):
     useraccounts = Accounts.objects.filter(user=request.user)
     form = AccountCreationForm()
+    if request.method == 'POST':
+        form = AccountCreationForm(request.POST)
+
+        if form.is_valid():
+            form.save(request.user)
+
+            messages.info(
+                request,
+                'New Account Created!'
+            )
     return render(request, 'e-branch/accounts.html', {'accounts':useraccounts, 'form':form})
 
 

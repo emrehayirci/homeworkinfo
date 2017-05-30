@@ -1,3 +1,5 @@
+from datetime import datetime
+from random import Random
 from django.contrib.auth.forms import UserCreationForm
 from users.models import User
 from accounts.models import Accounts, Loan,Transaction,LoanAccountPayment
@@ -5,6 +7,17 @@ from django.forms import ModelForm
 from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
 from django import forms
+
+
+def generateIban():
+    random = Random()
+    result = 'TR24'
+    for i in range(0, 4):
+        result += ' '
+        for j in range(0, 4):
+            result += str(random.randint(0, 9))
+    return result
+
 
 class RegistrationForm(UserCreationForm):
     class Meta:
@@ -42,6 +55,7 @@ class LoginForm(forms.Form):
         return self.cleaned_data
 
 class AccountCreationForm(ModelForm):
+
     class Meta:
         model = Accounts
         fields = [
@@ -53,3 +67,16 @@ class AccountCreationForm(ModelForm):
         super(AccountCreationForm, self).__init__(*args, **kwargs)
         self.fields['account_type'].widget.attrs['class'] = 'form-control'
         self.fields['currency_type'].widget.attrs['class'] = 'form-control'
+
+    def save(self, user, commit=True):
+        instance = super(AccountCreationForm, self).save(commit=False)
+        instance.iban = generateIban()
+        instance.amount = 0
+        instance.created_at = datetime.now()
+        instance.user = user
+        if commit:
+            instance.save()
+        return instance
+
+
+
